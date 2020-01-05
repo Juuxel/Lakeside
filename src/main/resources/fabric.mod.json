@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "id": "lakeside",
+  "version": "$version",
+
+  "name": "Lakeside",
+  "description": "TODO",
+  "authors": [
+    "Juuz"
+  ],
+  "contact": {
+    "homepage": "https://github.com/Juuxel/Lakeside",
+    "sources": "https://github.com/Juuxel/Lakeside",
+    "issues": "https://github.com/Juuxel/Lakeside/issues"
+  },
+
+  "license": "LGPL-3.0-only",
+  "icon": "assets/lakeside/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [{
+      "value": "juuxel.lakeside.Lakeside",
+      "adapter": "kotlin"
+    }]
+  },
+  "mixins": [
+    "mixins.lakeside.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "minecraft": ">=1.15-",
+    "fabric": "*"
+  },
+  "suggests": {
+    "lil-tater": "*"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "juuxel.lakeside.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "EaseBiomeEdgeLayerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
