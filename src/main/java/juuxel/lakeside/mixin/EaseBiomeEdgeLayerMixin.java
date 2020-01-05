@@ -16,7 +16,7 @@ public class EaseBiomeEdgeLayerMixin {
     private void onSample(LayerRandomnessSource context, int n, int e, int s, int w, int center, CallbackInfoReturnable<Integer> info) {
         if (n == center && e == center && s == center && w == center) {
             Biome base = Registry.BIOME.get(center);
-            Biome transformed = MoreOverworldBiomes.INSTANCE.transformSubBiome(base, context);
+            Biome transformed = MoreOverworldBiomes.INSTANCE.transformSmallVariant(base, context);
             if (transformed != null) {
                 info.setReturnValue(Registry.BIOME.getRawId(transformed));
             }
