@@ -17,6 +17,6 @@ object AddMediumVariantsLayer : CrossSamplingLayer {
             }
         }
 
-        return DEFAULT_BIOME
+        return center
     }
 }

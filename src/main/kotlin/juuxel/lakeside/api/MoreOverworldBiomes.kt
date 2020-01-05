@@ -17,7 +17,7 @@ object MoreOverworldBiomes {
     }
 
     fun addSmallVariant(base: Biome, variant: Biome, chance: Int) {
-        require(base !in mediumVariants) {
+        require(base !in smallVariants) {
             "Small variant for base biome ${Registry.BIOME.getId(base)} is already registered!"
         }
         smallVariants[base] = SmallVariantEntry(variant, chance)
