@@ -10,7 +10,7 @@ import net.minecraft.world.biome.layer.util.LayerSampler
 import java.util.*
 import java.util.function.LongFunction
 
-inline fun <T> Registry<T>.visit(crossinline visitor: (Identifier, T, Int) -> Unit) {
+inline fun <T> Registry<T>.visit(crossinline visitor: (id: Identifier, T, rawId: Int) -> Unit) {
     for (t in this) {
         visitor(getId(t) ?: throw IllegalStateException("Could not find ID for supposedly present registry entry: $t"), t, getRawId(t))
     }

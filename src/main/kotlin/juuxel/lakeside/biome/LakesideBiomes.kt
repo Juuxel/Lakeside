@@ -4,10 +4,12 @@ import com.terraformersmc.terraform.biome.builder.DefaultFeature.*
 import com.terraformersmc.terraform.biome.builder.TerraformBiome
 import juuxel.lakeside.Lakeside
 import juuxel.lakeside.api.MoreOverworldBiomes
+import juuxel.lakeside.util.visit
 import net.fabricmc.fabric.api.biomes.v1.OverworldBiomes
 import net.minecraft.entity.EntityType
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.biome.Biome
+import net.minecraft.world.biome.Biome.TemperatureGroup
 import net.minecraft.world.biome.Biomes
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.decorator.Decorator
@@ -41,7 +43,7 @@ object LakesideBiomes {
 
     private val LAKE_TEMPLATE = BASE_TEMPLATE.builder()
         .category(Biome.Category.RIVER)
-        .depth(-0.35f).scale(0f)
+        .depth(-0.45f).scale(0f)
         .temperature(0.7F).downfall(0.8F)
         .addDefaultFeatures(WATER_BIOME_OAK_TREES, DEFAULT_GRASS)
         .addCustomFeature(
@@ -83,7 +85,7 @@ object LakesideBiomes {
         .depth(0.2F).scale(0.2F)
         .temperature(0.25F).downfall(0.8F)
         .category(Biome.Category.TAIGA)
-        .addDefaultFeatures(LARGE_FERNS, DUNGEONS, TAIGA_TREES, TAIGA_GRASS, SWEET_BERRY_BUSHES)
+        .addDefaultFeatures(LARGE_FERNS, DUNGEONS, TAIGA_TREES, TAIGA_GRASS, SWEET_BERRY_BUSHES, EXTRA_MOUNTAIN_TREES)
         .addSpawnEntry(Biome.SpawnEntry(EntityType.FOX, 8, 2, 4))
         .build()
 
@@ -94,7 +96,7 @@ object LakesideBiomes {
         register("forest_island", FOREST_ISLAND)
         register("taiga_island", TAIGA_ISLAND)
 
-        // Smaller lakes
+        /*// Smaller lakes
         MoreOverworldBiomes.addSmallVariant(Biomes.FOREST, WARM_LAKE, 25)
         MoreOverworldBiomes.addSmallVariant(Biomes.BIRCH_FOREST, WARM_LAKE, 25)
         MoreOverworldBiomes.addSmallVariant(Biomes.PLAINS, WARM_LAKE, 25)
@@ -105,11 +107,14 @@ object LakesideBiomes {
         OverworldBiomes.addBiomeVariant(Biomes.MOUNTAINS, MOUNTAIN_LAKE, 0.05)
         OverworldBiomes.addBiomeVariant(Biomes.FOREST, WARM_LAKE, 0.05)
         OverworldBiomes.addBiomeVariant(Biomes.PLAINS, WARM_LAKE, 0.03)
-        OverworldBiomes.addBiomeVariant(Biomes.TAIGA, COLD_LAKE, 0.05)
+        OverworldBiomes.addBiomeVariant(Biomes.TAIGA, COLD_LAKE, 0.05)*/
 
         // Beaches
         OverworldBiomes.addEdgeBiome(MOUNTAIN_LAKE, Biomes.STONE_SHORE, 1.0)
         //OverworldBiomes.addEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 1.0)
+        OverworldBiomes.addShoreBiome(MOUNTAIN_LAKE, Biomes.TAIGA, 1.0)
+        OverworldBiomes.addShoreBiome(COLD_LAKE, Biomes.TAIGA, 1.0)
+        OverworldBiomes.addShoreBiome(WARM_LAKE, FOREST_ISLAND, 1.0)
 
         // Islands
         MoreOverworldBiomes.addSmallVariant(COLD_LAKE, TAIGA_ISLAND, 4)
@@ -118,8 +123,49 @@ object LakesideBiomes {
         MoreOverworldBiomes.addIsland(COLD_LAKE, TAIGA_ISLAND, 4)
         MoreOverworldBiomes.addIsland(MOUNTAIN_LAKE, TAIGA_ISLAND, 4)
         MoreOverworldBiomes.addIsland(WARM_LAKE, FOREST_ISLAND, 4)
+
+        Registry.BIOME.visit { _, biome, _ ->
+            if (BiomeTracker.hasLakes(biome)) {
+                registerLakes(biome)
+            }
+            if (biome.category == Biome.Category.OCEAN) {
+                registerOceanIslands(biome)
+            }
+        }
     }
 
     private fun register(name: String, biome: Biome): Biome =
         Registry.register(Registry.BIOME, Lakeside.id(name), biome)
+
+    private fun registerLakes(biome: Biome) {
+        val temperature = biome.temperatureGroup
+        val category = biome.category
+
+        if (category == Biome.Category.RIVER || category == Biome.Category.OCEAN) {
+            // Ignore water biomes
+            return
+        }
+
+        when {
+            category == Biome.Category.EXTREME_HILLS -> {
+                MoreOverworldBiomes.addSmallVariant(biome, MOUNTAIN_LAKE, 45)
+                OverworldBiomes.addBiomeVariant(biome, MOUNTAIN_LAKE, 0.05)
+            }
+
+            temperature == TemperatureGroup.COLD || category == Biome.Category.TAIGA -> {
+                MoreOverworldBiomes.addSmallVariant(biome, COLD_LAKE, 25)
+                OverworldBiomes.addBiomeVariant(biome, COLD_LAKE, 0.05)
+            }
+
+            temperature == TemperatureGroup.MEDIUM -> {
+                MoreOverworldBiomes.addSmallVariant(biome, WARM_LAKE, 25)
+                OverworldBiomes.addBiomeVariant(biome, WARM_LAKE, 0.05)
+            }
+        } // TODO: Lakes for WARM temperatures?
+    }
+
+    private fun registerOceanIslands(biome: Biome) {
+        MoreOverworldBiomes.addSmallVariant(biome, TAIGA_ISLAND, 20)
+        MoreOverworldBiomes.addSmallVariant(biome, FOREST_ISLAND, 20)
+    }
 }
