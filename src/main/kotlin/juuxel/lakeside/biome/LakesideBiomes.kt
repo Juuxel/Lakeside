@@ -63,9 +63,9 @@ object LakesideBiomes {
         .addSpawnEntry(Biome.SpawnEntry(EntityType.RABBIT, 4, 2, 3))
         .toTemplate()
 
-    val LAKE: Biome = LAKE_TEMPLATE.builder().build()
+    val WARM_LAKE: Biome = LAKE_TEMPLATE.builder().build()
 
-    val MOUNTAIN_LAKE: Biome = LAKE_TEMPLATE.builder()
+    val COLD_LAKE: Biome = LAKE_TEMPLATE.builder()
         .temperature(0.2F).downfall(0.3F)
         .build()
 
@@ -84,33 +84,33 @@ object LakesideBiomes {
         .build()
 
     fun init() {
-        register("lake", LAKE)
-        register("mountain_lake", MOUNTAIN_LAKE)
+        register("warm_lake", WARM_LAKE)
+        register("cold_lake", COLD_LAKE)
         register("forest_island", FOREST_ISLAND)
         register("taiga_island", TAIGA_ISLAND)
 
         // Smaller lakes
-        MoreOverworldBiomes.addSmallVariant(Biomes.FOREST, LAKE, 25)
-        MoreOverworldBiomes.addSmallVariant(Biomes.BIRCH_FOREST, LAKE, 25)
-        MoreOverworldBiomes.addSmallVariant(Biomes.PLAINS, LAKE, 25)
-        // TODO MoreOverworldBiomes.addSmallVariant(Biomes.MOUNTAINS, MOUNTAIN_LAKE, 45)
+        MoreOverworldBiomes.addSmallVariant(Biomes.FOREST, WARM_LAKE, 25)
+        MoreOverworldBiomes.addSmallVariant(Biomes.BIRCH_FOREST, WARM_LAKE, 25)
+        MoreOverworldBiomes.addSmallVariant(Biomes.PLAINS, WARM_LAKE, 25)
+        MoreOverworldBiomes.addSmallVariant(Biomes.TAIGA, COLD_LAKE, 25)
+        MoreOverworldBiomes.addSmallVariant(Biomes.MOUNTAINS, COLD_LAKE, 45)
 
         // Bigger lakes
-//        OverworldBiomes.addBiomeVariant(Biomes.MOUNTAINS, MOUNTAIN_LAKE, 0.05)
-        MoreOverworldBiomes.addMediumVariant(Biomes.MOUNTAINS, MOUNTAIN_LAKE, 0.05)
-        MoreOverworldBiomes.addMediumVariant(Biomes.FOREST, LAKE, 0.05)
-        MoreOverworldBiomes.addMediumVariant(Biomes.PLAINS, LAKE, 0.03)
+        OverworldBiomes.addBiomeVariant(Biomes.MOUNTAINS, COLD_LAKE, 0.05)
+        OverworldBiomes.addBiomeVariant(Biomes.FOREST, WARM_LAKE, 0.05)
+        OverworldBiomes.addBiomeVariant(Biomes.PLAINS, WARM_LAKE, 0.03)
 
         // Beaches
-        MoreOverworldBiomes.addPartialEdgeBiome(MOUNTAIN_LAKE, Biomes.BEACH, 0.2)
-        MoreOverworldBiomes.addPartialEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 0.2)
+        MoreOverworldBiomes.addPartialEdgeBiome(COLD_LAKE, Biomes.BEACH, 0.5)
+        MoreOverworldBiomes.addPartialEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 0.5)
         OverworldBiomes.addEdgeBiome(TAIGA_ISLAND, Biomes.STONE_SHORE, 0.1)
         OverworldBiomes.addEdgeBiome(TAIGA_ISLAND, Biomes.BEACH, 0.3)
         OverworldBiomes.addEdgeBiome(TAIGA_ISLAND, TAIGA_ISLAND, 0.6)
 
         // Islands
-        MoreOverworldBiomes.addSmallVariant(MOUNTAIN_LAKE, TAIGA_ISLAND, 5)
-        MoreOverworldBiomes.addSmallVariant(LAKE, FOREST_ISLAND, 5)
+        MoreOverworldBiomes.addSmallVariant(COLD_LAKE, TAIGA_ISLAND, 4)
+        MoreOverworldBiomes.addSmallVariant(WARM_LAKE, FOREST_ISLAND, 4)
     }
 
     private fun register(name: String, biome: Biome): Biome =

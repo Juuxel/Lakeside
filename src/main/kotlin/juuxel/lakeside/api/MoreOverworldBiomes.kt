@@ -8,9 +8,8 @@ import kotlin.math.ceil
 
 object MoreOverworldBiomes {
     private val smallVariants: MutableMap<Biome, SmallVariantEntry> = HashMap()
-    private val mediumVariants: MutableMap<Biome, MediumVariantEntry> = HashMap()
 
-    // TODO: Fix
+    @Deprecated("Use addEdgeBiome", ReplaceWith("OverworldBiomes.addEdgeBiome(base, edge)", "net.fabricmc.fabric.api.biomes.v1.OverworldBiomes"))
     fun addPartialEdgeBiome(base: Biome, edge: Biome, chance: Double) {
         OverworldBiomes.addEdgeBiome(base, edge, chance)
         OverworldBiomes.addEdgeBiome(base, base, ceil(chance) - chance)
@@ -29,19 +28,5 @@ object MoreOverworldBiomes {
             else null
         }
 
-    fun addMediumVariant(base: Biome, variant: Biome, chance: Double) {
-        require(base !in mediumVariants) {
-            "Medium variant for base biome ${Registry.BIOME.getId(base)} is already registered!"
-        }
-        mediumVariants[base] = MediumVariantEntry(variant, chance)
-    }
-
-    fun transformMediumVariant(base: Biome, random: LayerRandomnessSource): Biome? =
-        mediumVariants[base]?.let { entry ->
-            if (random.nextInt(Int.MAX_VALUE) < entry.chance * Int.MAX_VALUE) entry.variant
-            else null
-        }
-
     private data class SmallVariantEntry(val variant: Biome, val chance: Int)
-    private data class MediumVariantEntry(val variant: Biome, val chance: Double)
 }
