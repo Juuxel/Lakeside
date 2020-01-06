@@ -78,6 +78,18 @@ object LakesideBiomes {
         .toTemplate()
 
     val WARM_LAKE: Biome = LAKE_TEMPLATE.builder()
+        .addDefaultFeatures(KELP)
+        .addCustomFeature(
+            GenerationStep.Feature.VEGETAL_DECORATION,
+            Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
+                .createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(ChanceDecoratorConfig(4)))
+        )
+        .build()
+
+    val JUNGLE_LAKE: Biome = LAKE_TEMPLATE.builder()
+        .addDefaultFeatures(KELP, MORE_SEAGRASS)
+        .addSpawnEntry(Biome.SpawnEntry(EntityType.PUFFERFISH, 15, 1, 3))
+        .addSpawnEntry(Biome.SpawnEntry(EntityType.TROPICAL_FISH, 25, 8, 8))
         .addCustomFeature(
             GenerationStep.Feature.VEGETAL_DECORATION,
             Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
@@ -107,12 +119,23 @@ object LakesideBiomes {
         .addSpawnEntry(Biome.SpawnEntry(EntityType.FOX, 8, 2, 4))
         .build()
 
+    val JUNGLE_ISLAND: Biome = ISLAND_TEMPLATE.builder()
+        .depth(0.1F).scale(0.3F)
+        .temperature(0.95F).downfall(0.9F)
+        .category(Biome.Category.JUNGLE)
+        .addDefaultFeatures(BAMBOO, JUNGLE_EDGE_TREES, JUNGLE_GRASS, JUNGLE_VEGETATION)
+        .addSpawnEntry(Biome.SpawnEntry(EntityType.PARROT, 40, 1, 2))
+        .addSpawnEntry(Biome.SpawnEntry(EntityType.PANDA, 1, 1, 2))
+        .build()
+
     fun init() {
         register("warm_lake", WARM_LAKE)
         register("cold_lake", COLD_LAKE)
         register("mountain_lake", MOUNTAIN_LAKE)
+        register("jungle_lake", JUNGLE_LAKE)
         register("forest_island", FOREST_ISLAND)
         register("taiga_island", TAIGA_ISLAND)
+        register("jungle_island", JUNGLE_ISLAND)
 
         /*// Smaller lakes
         MoreOverworldBiomes.addSmallVariant(Biomes.FOREST, WARM_LAKE, 25)
@@ -129,18 +152,22 @@ object LakesideBiomes {
 
         // Beaches
         OverworldBiomes.addEdgeBiome(MOUNTAIN_LAKE, Biomes.STONE_SHORE, 1.0)
+        OverworldBiomes.addEdgeBiome(JUNGLE_LAKE, Biomes.JUNGLE_EDGE, 1.0)
         //OverworldBiomes.addEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 1.0)
-        OverworldBiomes.addShoreBiome(MOUNTAIN_LAKE, Biomes.TAIGA, 1.0)
-        OverworldBiomes.addShoreBiome(COLD_LAKE, Biomes.TAIGA, 1.0)
+        OverworldBiomes.addShoreBiome(MOUNTAIN_LAKE, TAIGA_ISLAND, 1.0)
+        OverworldBiomes.addShoreBiome(COLD_LAKE, TAIGA_ISLAND, 1.0)
         OverworldBiomes.addShoreBiome(WARM_LAKE, FOREST_ISLAND, 1.0)
+        OverworldBiomes.addShoreBiome(JUNGLE_LAKE, JUNGLE_ISLAND, 1.0)
 
         // Islands
         MoreOverworldBiomes.addSmallVariant(COLD_LAKE, TAIGA_ISLAND, 4)
         MoreOverworldBiomes.addSmallVariant(MOUNTAIN_LAKE, TAIGA_ISLAND, 4)
         MoreOverworldBiomes.addSmallVariant(WARM_LAKE, FOREST_ISLAND, 4)
+        MoreOverworldBiomes.addSmallVariant(JUNGLE_LAKE, JUNGLE_ISLAND, 4)
         MoreOverworldBiomes.addIsland(COLD_LAKE, TAIGA_ISLAND, 4)
         MoreOverworldBiomes.addIsland(MOUNTAIN_LAKE, TAIGA_ISLAND, 4)
         MoreOverworldBiomes.addIsland(WARM_LAKE, FOREST_ISLAND, 4)
+        MoreOverworldBiomes.addIsland(JUNGLE_LAKE, JUNGLE_ISLAND, 4)
 
         Registry.BIOME.visit { _, biome, _ ->
             if (BiomeTracker.hasLakes(biome)) {
@@ -168,6 +195,11 @@ object LakesideBiomes {
             category == Biome.Category.EXTREME_HILLS -> {
                 MoreOverworldBiomes.addSmallVariant(biome, MOUNTAIN_LAKE, 45)
                 OverworldBiomes.addBiomeVariant(biome, MOUNTAIN_LAKE, 0.05)
+            }
+
+            category == Biome.Category.JUNGLE -> {
+                MoreOverworldBiomes.addSmallVariant(biome, JUNGLE_LAKE, 25)
+                OverworldBiomes.addBiomeVariant(biome, JUNGLE_LAKE, 0.05)
             }
 
             temperature == TemperatureGroup.COLD || category == Biome.Category.TAIGA -> {
