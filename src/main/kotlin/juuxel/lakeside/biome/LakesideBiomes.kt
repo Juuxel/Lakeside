@@ -11,7 +11,10 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.Biome.TemperatureGroup
 import net.minecraft.world.biome.Biomes
+import net.minecraft.world.biome.DefaultBiomeFeatures
 import net.minecraft.world.gen.GenerationStep
+import net.minecraft.world.gen.decorator.ChanceDecoratorConfig
+import net.minecraft.world.gen.decorator.CountChanceDecoratorConfig
 import net.minecraft.world.gen.decorator.Decorator
 import net.minecraft.world.gen.decorator.DecoratorConfig
 import net.minecraft.world.gen.feature.Feature
@@ -65,7 +68,13 @@ object LakesideBiomes {
         .addSpawnEntry(Biome.SpawnEntry(EntityType.RABBIT, 4, 2, 3))
         .toTemplate()
 
-    val WARM_LAKE: Biome = LAKE_TEMPLATE.builder().build()
+    val WARM_LAKE: Biome = LAKE_TEMPLATE.builder()
+        .addCustomFeature(
+            GenerationStep.Feature.VEGETAL_DECORATION,
+            Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
+                .createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(ChanceDecoratorConfig(4)))
+        )
+        .build()
 
     val COLD_LAKE: Biome = LAKE_TEMPLATE.builder()
         .temperature(0.2F).downfall(0.3F)
