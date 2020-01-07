@@ -9,7 +9,6 @@ import net.minecraft.world.gen.chunk.ChunkGenerator
 import net.minecraft.world.gen.chunk.ChunkGeneratorConfig
 import net.minecraft.world.gen.feature.Feature
 import java.util.*
-import kotlin.math.abs
 import kotlin.math.hypot
 
 class SandOreFeature(
@@ -31,7 +30,7 @@ class SandOreFeature(
                 val block = world.getBlockState(currentPos).block
 
                 if (block === Blocks.SAND) {
-                    val rawBound = hypot(abs(x).toDouble(), abs(z).toDouble()) / config.radius * 15.0
+                    val rawBound = hypot(x.toDouble(), z.toDouble()) / config.radius * 15.0
                     if (random.nextDouble() < 1 / rawBound) {
                         world.setBlockState(currentPos, config.ore, 2)
                     }
