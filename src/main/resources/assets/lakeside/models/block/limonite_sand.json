@@ -1,6 +1,20 @@
 {
-  "parent": "block/cube_all",
+  "parent": "jmx:block/jmx_cube_all",
   "textures": {
     "all": "lakeside:block/limonite_sand"
+  },
+  "jmx": {
+    "textures": {
+      "jmx_tex_particle": "minecraft:block/sand",
+      "jmx_tex_all0": "minecraft:block/sand",
+      "jmx_tex_all1": "lakeside:block/limonite_sand"
+    },
+    "materials": {
+      "jmx_mat_all": {
+        "layer0": "solid",
+        "layer1": "translucent",
+        "color1": "0xFFFFFFFE"
+      }
+    }
   }
 }
