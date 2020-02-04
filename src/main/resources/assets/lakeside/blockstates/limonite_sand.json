@@ -1,5 +1,10 @@
 {
   "variants": {
-    "": { "model": "lakeside:block/limonite_sand" }
+    "": [
+      { "model": "lakeside:block/limonite_sand" },
+      { "model": "lakeside:block/limonite_sand", "y": 90 },
+      { "model": "lakeside:block/limonite_sand", "y": 180 },
+      { "model": "lakeside:block/limonite_sand", "y": 270 }
+    ]
   }
 }

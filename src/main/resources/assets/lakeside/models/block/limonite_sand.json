@@ -13,7 +13,7 @@
       "jmx_mat_all": {
         "layer0": "solid",
         "layer1": "translucent",
-        "color1": "0xFFFFFFFE"
+        "color1": "0xFFFFFFFF"
       }
     }
   }
