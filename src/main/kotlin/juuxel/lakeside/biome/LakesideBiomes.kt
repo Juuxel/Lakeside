@@ -5,6 +5,7 @@ import com.terraformersmc.terraform.biome.builder.TerraformBiome
 import juuxel.lakeside.Lakeside
 import juuxel.lakeside.api.MoreOverworldBiomes
 import juuxel.lakeside.block.LakesideBlocks
+import juuxel.lakeside.block.LimoniteSandBlock
 import juuxel.lakeside.feature.LakesideFeatures
 import juuxel.lakeside.feature.SandOreFeatureConfig
 import juuxel.lakeside.util.visit
@@ -60,7 +61,11 @@ object LakesideBiomes {
         .addCustomFeature(
             GenerationStep.Feature.UNDERGROUND_DECORATION,
             LakesideFeatures.SAND_ORE.configure(
-                SandOreFeatureConfig(LakesideBlocks.LIMONITE_SAND.defaultState, 6)
+                SandOreFeatureConfig(
+                    LakesideBlocks.LIMONITE_SAND.defaultState,
+                    radius = 6,
+                    levelProperty = LimoniteSandBlock.LEVEL
+                )
             ).createDecoratedFeature(Decorator.COUNT_TOP_SOLID.configure(CountDecoratorConfig(1)))
         )
         .addSpawnEntry(Biome.SpawnEntry(EntityType.SQUID, 2, 1, 4))
