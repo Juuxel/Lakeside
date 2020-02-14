@@ -6,6 +6,7 @@ import juuxel.lakeside.Lakeside
 import juuxel.lakeside.api.MoreOverworldBiomes
 import juuxel.lakeside.block.LakesideBlocks
 import juuxel.lakeside.block.LimoniteSandBlock
+import juuxel.lakeside.decorator.LakesideDecorators
 import juuxel.lakeside.feature.LakesideFeatures
 import juuxel.lakeside.feature.SandOreFeatureConfig
 import juuxel.lakeside.util.visit
@@ -17,10 +18,7 @@ import net.minecraft.world.biome.Biome.TemperatureGroup
 import net.minecraft.world.biome.Biomes
 import net.minecraft.world.biome.DefaultBiomeFeatures
 import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.decorator.ChanceDecoratorConfig
-import net.minecraft.world.gen.decorator.CountDecoratorConfig
-import net.minecraft.world.gen.decorator.Decorator
-import net.minecraft.world.gen.decorator.DecoratorConfig
+import net.minecraft.world.gen.decorator.*
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.SeagrassFeatureConfig
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder
@@ -66,7 +64,11 @@ object LakesideBiomes {
                     radius = 6,
                     levelProperty = LimoniteSandBlock.LEVEL
                 )
-            ).createDecoratedFeature(Decorator.COUNT_TOP_SOLID.configure(CountDecoratorConfig(1)))
+            ).createDecoratedFeature(
+                LakesideDecorators.COUNT_CHANCE_TOP_SOLID.configure(
+                    CountChanceDecoratorConfig(1, 0.5f)
+                )
+            )
         )
         .addSpawnEntry(Biome.SpawnEntry(EntityType.SQUID, 2, 1, 4))
         .addSpawnEntry(Biome.SpawnEntry(EntityType.SALMON, 5, 1, 5))
