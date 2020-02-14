@@ -1,3 +1,6 @@
 {
-  "parent": "lakeside:block/limonite_sand"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "lakeside:item/limonite_sand"
+  }
 }

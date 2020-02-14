@@ -4,7 +4,6 @@ import juuxel.lakeside.Lakeside
 import net.fabricmc.fabric.api.block.FabricBlockSettings
 import net.fabricmc.fabric.api.tools.FabricToolTags
 import net.minecraft.block.Block
-import net.minecraft.block.FallingBlock
 import net.minecraft.block.Material
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
@@ -13,7 +12,7 @@ import net.minecraft.sound.BlockSoundGroup
 import net.minecraft.util.registry.Registry
 
 object LakesideBlocks {
-    val LIMONITE_SAND: Block = FallingBlock(
+    val LIMONITE_SAND: Block = LimoniteSandBlock(
         FabricBlockSettings.of(Material.STONE)
             .strength(3.0F, 3.0F)
             .breakByTool(FabricToolTags.SHOVELS, 1)

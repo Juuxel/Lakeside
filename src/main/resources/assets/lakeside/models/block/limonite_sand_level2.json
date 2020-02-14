@@ -1,0 +1,33 @@
+{
+  "parent": "block/block",
+  "textures": {
+    "particle": "block/sand"
+  },
+  "elements": [
+    {
+      "from": [0, 0, 0],
+      "to": [16, 8, 16],
+      "faces": {
+        "down":  { "texture": "#particle", "cullface": "down", "jmx_tex0": "#jmx_tex_all0", "jmx_tex1": "#jmx_tex_all1", "jmx_material": "#jmx_mat_all" },
+        "up":    { "texture": "#particle", "jmx_tex0": "#jmx_tex_all0", "jmx_tex1": "#jmx_tex_all1", "jmx_material": "#jmx_mat_all" },
+        "north": { "texture": "#particle", "cullface": "north", "jmx_tex0": "#jmx_tex_all0", "jmx_tex1": "#jmx_tex_all1", "jmx_material": "#jmx_mat_all" },
+        "south": { "texture": "#particle", "cullface": "south", "jmx_tex0": "#jmx_tex_all0", "jmx_tex1": "#jmx_tex_all1", "jmx_material": "#jmx_mat_all" },
+        "west":  { "texture": "#particle", "cullface": "west", "jmx_tex0": "#jmx_tex_all0", "jmx_tex1": "#jmx_tex_all1", "jmx_material": "#jmx_mat_all" },
+        "east":  { "texture": "#particle", "cullface": "east", "jmx_tex0": "#jmx_tex_all0", "jmx_tex1": "#jmx_tex_all1", "jmx_material": "#jmx_mat_all" }
+      }
+    }
+  ],
+  "jmx": {
+    "textures": {
+      "jmx_tex_all0": "minecraft:block/sand",
+      "jmx_tex_all1": "lakeside:block/limonite_sand"
+    },
+    "materials": {
+      "jmx_mat_all": {
+        "layer0": "solid",
+        "layer1": "translucent",
+        "color1": "0xFFFFFFFF"
+      }
+    }
+  }
+}
