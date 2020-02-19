@@ -1,1 +1,0 @@
-- The classes in the `juuxel.terrestrialvacation.biome.fabric` package are from Fabric API, licensed under the Apache License.
