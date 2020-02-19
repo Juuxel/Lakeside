@@ -31,7 +31,9 @@
   "depends": {
     "fabricloader": ">=0.4.0",
     "minecraft": ">=1.15-",
-    "fabric": "*"
+    "fabric": "*",
+    "fabric-language-kotlin": "^1.3.60",
+    "terraform": "^1.3.4"
   },
   "suggests": {
     "lil-tater": "*"
