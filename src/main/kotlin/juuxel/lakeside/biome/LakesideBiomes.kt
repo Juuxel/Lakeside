@@ -4,11 +4,6 @@ import com.terraformersmc.terraform.biome.builder.DefaultFeature.*
 import com.terraformersmc.terraform.biome.builder.TerraformBiome
 import juuxel.lakeside.Lakeside
 import juuxel.lakeside.api.MoreOverworldBiomes
-import juuxel.lakeside.block.LakesideBlocks
-import juuxel.lakeside.block.LimoniteSandBlock
-import juuxel.lakeside.decorator.LakesideDecorators
-import juuxel.lakeside.feature.LakesideFeatures
-import juuxel.lakeside.feature.SandOreFeatureConfig
 import juuxel.lakeside.util.visit
 import net.fabricmc.fabric.api.biomes.v1.OverworldBiomes
 import net.minecraft.entity.EntityType
@@ -55,20 +50,6 @@ object LakesideBiomes {
             GenerationStep.Feature.VEGETAL_DECORATION,
             Feature.SEAGRASS.configure(SeagrassFeatureConfig(48, 0.4))
                 .createDecoratedFeature(Decorator.TOP_SOLID_HEIGHTMAP.configure(DecoratorConfig.DEFAULT))
-        )
-        .addCustomFeature(
-            GenerationStep.Feature.UNDERGROUND_DECORATION,
-            LakesideFeatures.SAND_ORE.configure(
-                SandOreFeatureConfig(
-                    LakesideBlocks.LIMONITE_SAND.defaultState,
-                    radius = 6,
-                    levelProperty = LimoniteSandBlock.LEVEL
-                )
-            ).createDecoratedFeature(
-                LakesideDecorators.COUNT_CHANCE_TOP_SOLID.configure(
-                    CountChanceDecoratorConfig(1, 0.5f)
-                )
-            )
         )
         .addSpawnEntry(Biome.SpawnEntry(EntityType.SQUID, 2, 1, 4))
         .addSpawnEntry(Biome.SpawnEntry(EntityType.SALMON, 5, 1, 5))

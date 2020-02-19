@@ -27,14 +27,14 @@ repositories {
         url = 'https://minecraft.curseforge.com/api/maven'
     }
 
-    maven {
+    /*maven {
         name = 'Grondag'
         url = "https://grondag-repo.appspot.com"
         credentials {
             username = "guest"
             password = ""
         }
-    }
+    }*/
 }
 
 dependencies {
@@ -49,8 +49,8 @@ dependencies {
 
     modImplementation "com.terraformersmc:terraform:$project.terraform"
     include "com.terraformersmc:terraform:$project.terraform"
-    modImplementation "grondag:jmx-mc115:$project.jmx"
-    include "grondag:jmx-mc115:$project.jmx"
+//    modImplementation "grondag:jmx-mc115:$project.jmx"
+//    include "grondag:jmx-mc115:$project.jmx"
 }
 
 processResources {
