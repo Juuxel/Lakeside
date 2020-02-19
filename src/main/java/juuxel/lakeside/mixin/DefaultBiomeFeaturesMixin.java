@@ -1,6 +1,7 @@
 package juuxel.lakeside.mixin;
 
 import juuxel.lakeside.biome.BiomeTracker;
+import juuxel.lakeside.config.Config;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.DefaultBiomeFeatures;
 import org.spongepowered.asm.mixin.Mixin;
@@ -16,7 +17,8 @@ public class DefaultBiomeFeaturesMixin {
         // in the vanilla biome array
         BiomeTracker.INSTANCE.addBiomeWithLakes(biome);
 
-        // TODO: Add config option
-        info.cancel();
+        if (Config.get().getDisableVanillaLakes()) {
+            info.cancel();
+        }
     }
 }
