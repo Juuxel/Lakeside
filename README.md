@@ -1,7 +1,7 @@
 <img src="icon.png" align="left" width="180px"/>
 
-# Terrestrial Vacation
+# Lakeside
 
-[![](https://img.shields.io/github/license/Juuxel/TerrestrialVacation.svg)](COPYING) [![](https://img.shields.io/github/release/Juuxel/TerrestrialVacation.svg)](https://github.com/Juuxel/TerrestrialVacation/releases) ![](https://img.shields.io/badge/minecraft-1.15-blueviolet.svg)
+[![](https://img.shields.io/github/license/Juuxel/Lakeside.svg)](COPYING) [![](https://img.shields.io/github/release/Juuxel/Lakeside.svg)](https://github.com/Juuxel/Lakeside/releases) ![](https://img.shields.io/badge/minecraft-1.15-blueviolet.svg)
 
-*Take a vacation in a terrestrial world!* • [Downloads](https://github.com/Juuxel/TerrestrialVacation/releases)
+*A revamp of Minecraft's lakes* • [Downloads](https://github.com/Juuxel/Lakeside/releases)
