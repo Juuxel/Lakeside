@@ -6,6 +6,23 @@ pluginManagement {
             url = 'https://maven.fabricmc.net/'
         }
         gradlePluginPortal()
+        maven {
+            name = "Voldemaven"
+            url = uri("https://files.minecraftforge.net/maven/")
+        }
+        maven {
+            name = "Jitpack"
+            url = uri("https://jitpack.io/")
+        }
+    }
+
+    resolutionStrategy {
+        eachPlugin {
+            def version = requested.version
+            if (requested.id.id == "fabric-loom" && (version == null || !version.endsWith("-SNAPSHOT"))) {
+                useModule("com.github.Chocohead:Fabric-Loom:${requested.version}")
+            }
+        }
     }
 }
 
