@@ -11,7 +11,7 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.Biome.TemperatureGroup
 import net.minecraft.world.biome.Biomes
-import net.minecraft.world.biome.DefaultBiomeFeatures
+import net.minecraft.world.gen.feature.DefaultBiomeFeatures
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.decorator.*
 import net.minecraft.world.gen.feature.Feature

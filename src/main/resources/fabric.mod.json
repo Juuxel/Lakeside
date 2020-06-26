@@ -33,7 +33,7 @@
     "minecraft": ">=1.16-",
     "fabric": "*",
     "fabric-language-kotlin": "^1.3.60",
-    "terraform": "^1.5.2"
+    "terraform": "^2.1.0"
   },
   "suggests": {
     "lil-tater": "*"

@@ -3,7 +3,7 @@ package juuxel.lakeside.mixin;
 import juuxel.lakeside.biome.BiomeTracker;
 import juuxel.lakeside.config.Config;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.DefaultBiomeFeatures;
+import net.minecraft.world.gen.feature.DefaultBiomeFeatures;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
