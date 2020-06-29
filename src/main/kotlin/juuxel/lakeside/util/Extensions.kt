@@ -7,7 +7,6 @@ import net.minecraft.world.biome.layer.type.ParentedLayer
 import net.minecraft.world.biome.layer.util.LayerFactory
 import net.minecraft.world.biome.layer.util.LayerSampleContext
 import net.minecraft.world.biome.layer.util.LayerSampler
-import java.util.*
 import java.util.function.LongFunction
 
 inline fun <T> Registry<T>.visit(crossinline visitor: (id: Identifier, T, rawId: Int) -> Unit) {

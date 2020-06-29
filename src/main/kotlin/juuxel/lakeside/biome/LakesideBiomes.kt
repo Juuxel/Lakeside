@@ -7,13 +7,15 @@ import juuxel.lakeside.api.MoreOverworldBiomes
 import juuxel.lakeside.util.visit
 import net.fabricmc.fabric.api.biomes.v1.OverworldBiomes
 import net.minecraft.entity.EntityType
+import net.minecraft.sound.BiomeMoodSound
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.biome.Biome
 import net.minecraft.world.biome.Biome.TemperatureGroup
+import net.minecraft.world.biome.BiomeEffects
 import net.minecraft.world.biome.Biomes
-import net.minecraft.world.biome.DefaultBiomeFeatures
 import net.minecraft.world.gen.GenerationStep
 import net.minecraft.world.gen.decorator.*
+import net.minecraft.world.gen.feature.DefaultBiomeFeatures
 import net.minecraft.world.gen.feature.Feature
 import net.minecraft.world.gen.feature.SeagrassFeatureConfig
 import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder
@@ -21,10 +23,14 @@ import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder
 object LakesideBiomes {
     private fun TerraformBiome.Builder.toTemplate() = TerraformBiome.Template(this)
 
+    // TODO: See https://github.com/TerraformersMC/Terraform/issues/15
+    @Deprecated("")
+    private fun TerraformBiome.Builder.effects(): TerraformBiome.Builder =
+        effects(BiomeEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533).fogColor(0xC0D8FF).moodSound(BiomeMoodSound.CAVE).build())
+
     private val BASE_TEMPLATE: TerraformBiome.Template = TerraformBiome.builder()
         .configureSurfaceBuilder(SurfaceBuilder.DEFAULT, SurfaceBuilder.GRASS_CONFIG)
         .precipitation(Biome.Precipitation.RAIN)
-        .waterColor(0x3F76E4).waterFogColor(0x050533)
         .addDefaultFeatures(
             LAND_CARVERS, STRUCTURES, DUNGEONS, MINEABLES, ORES, DISKS,
             SPRINGS, FROZEN_TOP_LAYER, DEFAULT_FLOWERS, DEFAULT_MUSHROOMS, DEFAULT_VEGETATION
@@ -72,6 +78,7 @@ object LakesideBiomes {
             Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
                 .createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(ChanceDecoratorConfig(4)))
         )
+        .effects()
         .build()
 
     val JUNGLE_LAKE: Biome = LAKE_TEMPLATE.builder()
@@ -83,20 +90,24 @@ object LakesideBiomes {
             Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
                 .createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(ChanceDecoratorConfig(4)))
         )
+        .effects()
         .build()
 
     val COLD_LAKE: Biome = LAKE_TEMPLATE.builder()
         .temperature(0.2F).downfall(0.3F)
+        .effects()
         .build()
 
     val MOUNTAIN_LAKE: Biome = LAKE_TEMPLATE.builder()
         .temperature(0.2F).downfall(0.3F)
+        .effects()
         .build()
 
     val FOREST_ISLAND: Biome = ISLAND_TEMPLATE.builder()
         .temperature(0.7F).downfall(0.8F)
         .category(Biome.Category.FOREST)
         .addDefaultFeatures(FOREST_FLOWERS, DUNGEONS, FOREST_TREES, FOREST_GRASS)
+        .effects()
         .build()
 
     val TAIGA_ISLAND: Biome = ISLAND_TEMPLATE.builder()
@@ -105,6 +116,7 @@ object LakesideBiomes {
         .category(Biome.Category.TAIGA)
         .addDefaultFeatures(LARGE_FERNS, DUNGEONS, TAIGA_TREES, TAIGA_GRASS, SWEET_BERRY_BUSHES, EXTRA_MOUNTAIN_TREES)
         .addSpawnEntry(Biome.SpawnEntry(EntityType.FOX, 8, 2, 4))
+        .effects()
         .build()
 
     val JUNGLE_ISLAND: Biome = ISLAND_TEMPLATE.builder()
@@ -114,6 +126,7 @@ object LakesideBiomes {
         .addDefaultFeatures(BAMBOO, JUNGLE_EDGE_TREES, JUNGLE_GRASS, JUNGLE_VEGETATION)
         .addSpawnEntry(Biome.SpawnEntry(EntityType.PARROT, 40, 1, 2))
         .addSpawnEntry(Biome.SpawnEntry(EntityType.PANDA, 1, 1, 2))
+        .effects()
         .build()
 
     fun init() {
