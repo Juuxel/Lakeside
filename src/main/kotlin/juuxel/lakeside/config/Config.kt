@@ -22,7 +22,7 @@ data class Config(
             """.trimMargin()
 
         private fun load(): Config {
-            val path = FabricLoader.getInstance().configDirectory.toPath().resolve("Lakeside.properties")
+            val path = FabricLoader.getInstance().configDir.resolve("Lakeside.properties")
             val properties = Properties()
 
             if (Files.notExists(path)) {
