@@ -1,159 +1,49 @@
 package juuxel.lakeside.biome
 
-import com.terraformersmc.terraform.biome.builder.DefaultFeature.*
-import com.terraformersmc.terraform.biome.builder.TerraformBiome
+import com.mojang.serialization.Lifecycle
 import juuxel.lakeside.Lakeside
-import juuxel.lakeside.api.MoreOverworldBiomes
+import juuxel.lakeside.mixin.BuiltinBiomesAccessor
+import juuxel.lakeside.mixin.DefaultBiomeCreatorAccessor
 import juuxel.lakeside.util.visit
-import net.fabricmc.fabric.api.biomes.v1.OverworldBiomes
+import net.fabricmc.fabric.api.biome.v1.OverworldBiomes
 import net.minecraft.entity.EntityType
+import net.minecraft.entity.SpawnGroup
 import net.minecraft.sound.BiomeMoodSound
+import net.minecraft.util.registry.BuiltinRegistries
+import net.minecraft.util.registry.MutableRegistry
 import net.minecraft.util.registry.Registry
+import net.minecraft.util.registry.RegistryKey
 import net.minecraft.world.biome.Biome
-import net.minecraft.world.biome.Biome.TemperatureGroup
 import net.minecraft.world.biome.BiomeEffects
-import net.minecraft.world.biome.Biomes
+import net.minecraft.world.biome.BiomeKeys
+import net.minecraft.world.biome.GenerationSettings
+import net.minecraft.world.biome.SpawnSettings
 import net.minecraft.world.gen.GenerationStep
-import net.minecraft.world.gen.decorator.*
+import net.minecraft.world.gen.feature.ConfiguredFeatures
 import net.minecraft.world.gen.feature.DefaultBiomeFeatures
-import net.minecraft.world.gen.feature.Feature
-import net.minecraft.world.gen.feature.SeagrassFeatureConfig
-import net.minecraft.world.gen.surfacebuilder.SurfaceBuilder
+import net.minecraft.world.gen.surfacebuilder.ConfiguredSurfaceBuilders
 
 object LakesideBiomes {
-    private fun TerraformBiome.Builder.toTemplate() = TerraformBiome.Template(this)
-
-    // TODO: See https://github.com/TerraformersMC/Terraform/issues/15
-    @Deprecated("")
-    private fun TerraformBiome.Builder.effects(): TerraformBiome.Builder =
-        effects(BiomeEffects.Builder().waterColor(0x3F76E4).waterFogColor(0x050533).fogColor(0xC0D8FF).moodSound(BiomeMoodSound.CAVE).build())
-
-    private val BASE_TEMPLATE: TerraformBiome.Template = TerraformBiome.builder()
-        .configureSurfaceBuilder(SurfaceBuilder.DEFAULT, SurfaceBuilder.GRASS_CONFIG)
-        .precipitation(Biome.Precipitation.RAIN)
-        .addDefaultFeatures(
-            LAND_CARVERS, STRUCTURES, DUNGEONS, MINEABLES, ORES, DISKS,
-            SPRINGS, FROZEN_TOP_LAYER, DEFAULT_FLOWERS, DEFAULT_MUSHROOMS, DEFAULT_VEGETATION
-        )
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.BAT, 10, 8, 8))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.SPIDER, 100, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.ZOMBIE, 95, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.DROWNED, 100, 1, 1))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.ZOMBIE_VILLAGER, 5, 1, 1))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.SKELETON, 100, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.CREEPER, 100, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.SLIME, 100, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.ENDERMAN, 10, 1, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.WITCH, 5, 1, 1))
-        .toTemplate()
-
-    private val LAKE_TEMPLATE = BASE_TEMPLATE.builder()
-        .category(Biome.Category.RIVER)
-        .depth(-0.45f).scale(0f)
-        .temperature(0.7F).downfall(0.8F)
-        .addDefaultFeatures(WATER_BIOME_OAK_TREES, DEFAULT_GRASS)
-        .addCustomFeature(
-            GenerationStep.Feature.VEGETAL_DECORATION,
-            Feature.SEAGRASS.configure(SeagrassFeatureConfig(48, 0.4))
-                .createDecoratedFeature(Decorator.TOP_SOLID_HEIGHTMAP.configure(DecoratorConfig.DEFAULT))
-        )
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.SQUID, 2, 1, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.SALMON, 5, 1, 5))
-        .toTemplate()
-
-    private val ISLAND_TEMPLATE = BASE_TEMPLATE.builder()
-        .depth(0.125F).scale(0.05F)
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.SHEEP, 12, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.PIG, 10, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.CHICKEN, 10, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.COW, 8, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.WOLF, 8, 4, 4))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.RABBIT, 4, 2, 3))
-        .toTemplate()
-
-    val WARM_LAKE: Biome = LAKE_TEMPLATE.builder()
-        .addDefaultFeatures(KELP)
-        .addCustomFeature(
-            GenerationStep.Feature.VEGETAL_DECORATION,
-            Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
-                .createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(ChanceDecoratorConfig(4)))
-        )
-        .effects()
-        .build()
-
-    val JUNGLE_LAKE: Biome = LAKE_TEMPLATE.builder()
-        .addDefaultFeatures(KELP, MORE_SEAGRASS)
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.PUFFERFISH, 15, 1, 3))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.TROPICAL_FISH, 25, 8, 8))
-        .addCustomFeature(
-            GenerationStep.Feature.VEGETAL_DECORATION,
-            Feature.RANDOM_PATCH.configure(DefaultBiomeFeatures.LILY_PAD_CONFIG)
-                .createDecoratedFeature(Decorator.CHANCE_HEIGHTMAP.configure(ChanceDecoratorConfig(4)))
-        )
-        .effects()
-        .build()
-
-    val COLD_LAKE: Biome = LAKE_TEMPLATE.builder()
-        .temperature(0.2F).downfall(0.3F)
-        .effects()
-        .build()
-
-    val MOUNTAIN_LAKE: Biome = LAKE_TEMPLATE.builder()
-        .temperature(0.2F).downfall(0.3F)
-        .effects()
-        .build()
-
-    val FOREST_ISLAND: Biome = ISLAND_TEMPLATE.builder()
-        .temperature(0.7F).downfall(0.8F)
-        .category(Biome.Category.FOREST)
-        .addDefaultFeatures(FOREST_FLOWERS, DUNGEONS, FOREST_TREES, FOREST_GRASS)
-        .effects()
-        .build()
-
-    val TAIGA_ISLAND: Biome = ISLAND_TEMPLATE.builder()
-        .depth(0.2F).scale(0.2F)
-        .temperature(0.25F).downfall(0.8F)
-        .category(Biome.Category.TAIGA)
-        .addDefaultFeatures(LARGE_FERNS, DUNGEONS, TAIGA_TREES, TAIGA_GRASS, SWEET_BERRY_BUSHES, EXTRA_MOUNTAIN_TREES)
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.FOX, 8, 2, 4))
-        .effects()
-        .build()
-
-    val JUNGLE_ISLAND: Biome = ISLAND_TEMPLATE.builder()
-        .depth(0.1F).scale(0.3F)
-        .temperature(0.95F).downfall(0.9F)
-        .category(Biome.Category.JUNGLE)
-        .addDefaultFeatures(BAMBOO, JUNGLE_EDGE_TREES, JUNGLE_GRASS, JUNGLE_VEGETATION)
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.PARROT, 40, 1, 2))
-        .addSpawnEntry(Biome.SpawnEntry(EntityType.PANDA, 1, 1, 2))
-        .effects()
-        .build()
+    val WARM_LAKE = key("warm_lake")
+    val JUNGLE_LAKE = key("jungle_lake")
+    val COLD_LAKE = key("cold_lake")
+    val MOUNTAIN_LAKE = key("mountain_lake")
+    val FOREST_ISLAND = key("forest_island")
+    val TAIGA_ISLAND = key("taiga_island")
+    val JUNGLE_ISLAND = key("jungle_island")
 
     fun init() {
-        register("warm_lake", WARM_LAKE)
-        register("cold_lake", COLD_LAKE)
-        register("mountain_lake", MOUNTAIN_LAKE)
-        register("jungle_lake", JUNGLE_LAKE)
-        register("forest_island", FOREST_ISLAND)
-        register("taiga_island", TAIGA_ISLAND)
-        register("jungle_island", JUNGLE_ISLAND)
-
-        /*// Smaller lakes
-        MoreOverworldBiomes.addSmallVariant(Biomes.FOREST, WARM_LAKE, 25)
-        MoreOverworldBiomes.addSmallVariant(Biomes.BIRCH_FOREST, WARM_LAKE, 25)
-        MoreOverworldBiomes.addSmallVariant(Biomes.PLAINS, WARM_LAKE, 25)
-        MoreOverworldBiomes.addSmallVariant(Biomes.TAIGA, COLD_LAKE, 25)
-        MoreOverworldBiomes.addSmallVariant(Biomes.MOUNTAINS, MOUNTAIN_LAKE, 45)
-
-        // Bigger lakes
-        OverworldBiomes.addBiomeVariant(Biomes.MOUNTAINS, MOUNTAIN_LAKE, 0.05)
-        OverworldBiomes.addBiomeVariant(Biomes.FOREST, WARM_LAKE, 0.05)
-        OverworldBiomes.addBiomeVariant(Biomes.PLAINS, WARM_LAKE, 0.03)
-        OverworldBiomes.addBiomeVariant(Biomes.TAIGA, COLD_LAKE, 0.05)*/
+        register(WARM_LAKE, createBiome(Templates.WARM_LAKE, temperature = 0.7f))
+        register(JUNGLE_LAKE, createBiome(Templates.JUNGLE_LAKE, temperature = 0.8f))
+        register(COLD_LAKE, createBiome(Templates.COLD_LAKE, temperature = 0.2f))
+        register(MOUNTAIN_LAKE, createBiome(Templates.MOUNTAIN_LAKE, temperature = 0.2f))
+        register(FOREST_ISLAND, createBiome(Templates.FOREST_ISLAND, temperature = 0.7f))
+        register(TAIGA_ISLAND, createBiome(Templates.TAIGA_ISLAND, temperature = 0.25f))
+        register(JUNGLE_ISLAND, createBiome(Templates.JUNGLE_ISLAND, temperature = 0.95f))
 
         // Beaches
-        OverworldBiomes.addEdgeBiome(MOUNTAIN_LAKE, Biomes.STONE_SHORE, 1.0)
-        OverworldBiomes.addEdgeBiome(JUNGLE_LAKE, Biomes.JUNGLE_EDGE, 1.0)
+        OverworldBiomes.addEdgeBiome(MOUNTAIN_LAKE, BiomeKeys.STONE_SHORE, 1.0)
+        OverworldBiomes.addEdgeBiome(JUNGLE_LAKE, BiomeKeys.JUNGLE_EDGE, 1.0)
         //OverworldBiomes.addEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 1.0)
         OverworldBiomes.addShoreBiome(MOUNTAIN_LAKE, TAIGA_ISLAND, 1.0)
         OverworldBiomes.addShoreBiome(COLD_LAKE, TAIGA_ISLAND, 1.0)
@@ -170,7 +60,7 @@ object LakesideBiomes {
         MoreOverworldBiomes.addIsland(WARM_LAKE, FOREST_ISLAND, 4)
         MoreOverworldBiomes.addIsland(JUNGLE_LAKE, JUNGLE_ISLAND, 4)
 
-        Registry.BIOME.visit { _, biome, _ ->
+        BuiltinRegistries.BIOME.visit { _, biome, _ ->
             if (BiomeTracker.hasLakes(biome)) {
                 registerLakes(biome)
             }
@@ -180,11 +70,34 @@ object LakesideBiomes {
         }
     }
 
-    private fun register(name: String, biome: Biome): Biome =
-        Registry.register(Registry.BIOME, Lakeside.id(name), biome)
+    private fun key(id: String): RegistryKey<Biome> = RegistryKey.of(Registry.BIOME_KEY, Lakeside.id(id))
+
+    @Suppress("ThrowableNotThrown")
+    private fun getKey(biome: Biome): RegistryKey<Biome> =
+        BuiltinRegistries.BIOME.getKey(biome).orElseThrow { RuntimeException("Key not found for biome $biome!") }
+
+    private fun createBiome(template: Template, temperature: Float): Biome =
+        Biome.Builder()
+            .generationSettings(GenerationSettings.Builder().also(template.generation).build())
+            .spawnSettings(SpawnSettings.Builder().also(template.spawn).build())
+            .effects(BiomeEffects.Builder().also(template.effects).skyColor(DefaultBiomeCreatorAccessor.callGetSkyColor(temperature)).build())
+            .also(template.biome)
+            .temperature(temperature)
+            .build()
+
+    // Copied verbatim from Woods and Mires.
+    private fun register(key: RegistryKey<Biome>, biome: Biome) {
+        (BuiltinRegistries.BIOME as MutableRegistry<Biome>).add(key, biome, Lifecycle.stable())
+
+        // Ensures that the biome is stored in the internal raw ID map of BuiltinBiomes.
+        // Fabric API usually does this, but some of my biomes don't go through OverworldBiomes at all,
+        // which means that won't always get done.
+        val byRawId = BuiltinBiomesAccessor.getBY_RAW_ID()
+        byRawId[BuiltinRegistries.BIOME.getRawId(biome)] = key
+    }
 
     private fun registerLakes(biome: Biome) {
-        val temperature = biome.temperatureGroup
+        val key = getKey(biome)
         val category = biome.category
 
         if (category == Biome.Category.RIVER || category == Biome.Category.OCEAN) {
@@ -194,29 +107,181 @@ object LakesideBiomes {
 
         when {
             category == Biome.Category.EXTREME_HILLS -> {
-                MoreOverworldBiomes.addSmallVariant(biome, MOUNTAIN_LAKE, 45)
-                OverworldBiomes.addBiomeVariant(biome, MOUNTAIN_LAKE, 0.05)
+                MoreOverworldBiomes.addSmallVariant(key, MOUNTAIN_LAKE, 45)
+                OverworldBiomes.addBiomeVariant(key, MOUNTAIN_LAKE, 0.05)
             }
 
             category == Biome.Category.JUNGLE -> {
-                MoreOverworldBiomes.addSmallVariant(biome, JUNGLE_LAKE, 25)
-                OverworldBiomes.addBiomeVariant(biome, JUNGLE_LAKE, 0.05)
+                MoreOverworldBiomes.addSmallVariant(key, JUNGLE_LAKE, 25)
+                OverworldBiomes.addBiomeVariant(key, JUNGLE_LAKE, 0.05)
             }
 
-            temperature == TemperatureGroup.COLD || category == Biome.Category.TAIGA -> {
-                MoreOverworldBiomes.addSmallVariant(biome, COLD_LAKE, 25)
-                OverworldBiomes.addBiomeVariant(biome, COLD_LAKE, 0.05)
+            category == Biome.Category.ICY || category == Biome.Category.TAIGA -> {
+                MoreOverworldBiomes.addSmallVariant(key, COLD_LAKE, 25)
+                OverworldBiomes.addBiomeVariant(key, COLD_LAKE, 0.05)
             }
 
-            temperature == TemperatureGroup.MEDIUM -> {
-                MoreOverworldBiomes.addSmallVariant(biome, WARM_LAKE, 25)
-                OverworldBiomes.addBiomeVariant(biome, WARM_LAKE, 0.05)
+            else -> {
+                MoreOverworldBiomes.addSmallVariant(key, WARM_LAKE, 25)
+                OverworldBiomes.addBiomeVariant(key, WARM_LAKE, 0.05)
             }
-        } // TODO: Lakes for WARM temperatures?
+        }
     }
 
     private fun registerOceanIslands(biome: Biome) {
-        MoreOverworldBiomes.addSmallVariant(biome, TAIGA_ISLAND, 20)
-        MoreOverworldBiomes.addSmallVariant(biome, FOREST_ISLAND, 20)
+        val key = getKey(biome)
+
+        MoreOverworldBiomes.addSmallVariant(key, TAIGA_ISLAND, 20)
+        MoreOverworldBiomes.addSmallVariant(key, FOREST_ISLAND, 20)
+    }
+
+    private class Template(
+        val generation: (GenerationSettings.Builder) -> Unit = {},
+        val spawn: (SpawnSettings.Builder) -> Unit = {},
+        val effects: (BiomeEffects.Builder) -> Unit = {},
+        val biome: (Biome.Builder) -> Unit = {}
+    ) {
+        fun parent(parent: Template) = Template(
+            generation = {
+                parent.generation(it)
+                generation(it)
+            },
+            spawn = {
+                parent.spawn(it)
+                spawn(it)
+            },
+            effects = {
+                parent.effects(it)
+                effects(it)
+            },
+            biome = {
+                parent.biome(it)
+                biome(it)
+            }
+        )
+    }
+
+    private object Templates {
+        private val BASE = Template(
+            generation = { generation ->
+                generation.surfaceBuilder(ConfiguredSurfaceBuilders.GRASS)
+                DefaultBiomeFeatures.addLandCarvers(generation)
+                DefaultBiomeFeatures.addDefaultUndergroundStructures(generation)
+                DefaultBiomeFeatures.addDungeons(generation)
+                DefaultBiomeFeatures.addMineables(generation)
+                DefaultBiomeFeatures.addDefaultOres(generation)
+                DefaultBiomeFeatures.addDefaultDisks(generation)
+                DefaultBiomeFeatures.addSprings(generation)
+                DefaultBiomeFeatures.addFrozenTopLayer(generation)
+                DefaultBiomeFeatures.addDefaultFlowers(generation)
+                DefaultBiomeFeatures.addDefaultMushrooms(generation)
+                DefaultBiomeFeatures.addDefaultVegetation(generation)
+            },
+            spawn = { spawn -> DefaultBiomeFeatures.addBatsAndMonsters(spawn) },
+            effects = { effects ->
+                effects.waterColor(0x3F76E4).waterFogColor(0x050533).fogColor(0xC0D8FF).moodSound(BiomeMoodSound.CAVE)
+            },
+            biome = { biome -> biome.precipitation(Biome.Precipitation.RAIN) }
+        )
+
+        private val LAKE = Template(
+            generation = { generation ->
+                DefaultBiomeFeatures.addWaterBiomeOakTrees(generation)
+                DefaultBiomeFeatures.addDefaultGrass(generation)
+                generation.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.SEAGRASS_RIVER)
+            },
+            spawn = { spawn ->
+                spawn.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.SQUID, 2, 1, 4))
+                spawn.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.SALMON, 5, 1, 5))
+            },
+            biome = { biome ->
+                biome.depth(-0.45f).scale(0f)
+                    .category(Biome.Category.RIVER)
+                    .downfall(0.8F)
+            }
+        ).parent(BASE)
+
+        private val ISLAND = Template(
+            spawn = { spawn ->
+                DefaultBiomeFeatures.addFarmAnimals(spawn)
+                spawn.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.WOLF, 8, 4, 4))
+                spawn.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.RABBIT, 4, 2, 3))
+            },
+            biome = { biome ->
+                biome.depth(0.125f).scale(0.05f)
+            }
+        ).parent(BASE)
+
+        val WARM_LAKE = Template(
+            generation = { generation ->
+                DefaultBiomeFeatures.addKelp(generation)
+                generation.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.PATCH_WATERLILLY)
+            }
+        ).parent(LAKE)
+
+        val JUNGLE_LAKE = Template(
+            generation = { generation ->
+                DefaultBiomeFeatures.addKelp(generation)
+                generation.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.PATCH_WATERLILLY)
+            },
+            spawn = { spawn ->
+                spawn.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.PUFFERFISH, 15, 1, 3))
+                spawn.spawn(SpawnGroup.WATER_CREATURE, SpawnSettings.SpawnEntry(EntityType.TROPICAL_FISH, 25, 8, 8))
+            }
+        ).parent(LAKE)
+
+        val COLD_LAKE = Template(
+            biome = { biome ->
+                biome.downfall(0.3f)
+            }
+        ).parent(LAKE)
+
+        val MOUNTAIN_LAKE = Template(
+            biome = { biome ->
+                biome.downfall(0.3f)
+            }
+        ).parent(LAKE)
+
+        val FOREST_ISLAND = Template(
+            generation = { generation ->
+                DefaultBiomeFeatures.addForestFlowers(generation)
+                DefaultBiomeFeatures.addDungeons(generation)
+                DefaultBiomeFeatures.addForestTrees(generation)
+                DefaultBiomeFeatures.addForestGrass(generation)
+            },
+            biome = { biome ->
+                biome.downfall(0.8f).category(Biome.Category.FOREST)
+            }
+        ).parent(ISLAND)
+
+        val TAIGA_ISLAND = Template(
+            generation = { generation ->
+                DefaultBiomeFeatures.addLargeFerns(generation)
+                DefaultBiomeFeatures.addDungeons(generation)
+                DefaultBiomeFeatures.addTaigaTrees(generation)
+                DefaultBiomeFeatures.addTaigaGrass(generation)
+                DefaultBiomeFeatures.addSweetBerryBushes(generation)
+                DefaultBiomeFeatures.addExtraMountainTrees(generation)
+            },
+            biome = { biome ->
+                biome.depth(0.2f).scale(0.2f).downfall(0.8f).category(Biome.Category.TAIGA)
+            }
+        ).parent(ISLAND)
+
+        val JUNGLE_ISLAND = Template(
+            generation = { generation ->
+                DefaultBiomeFeatures.addBamboo(generation)
+                DefaultBiomeFeatures.addJungleEdgeTrees(generation)
+                DefaultBiomeFeatures.addJungleGrass(generation)
+                DefaultBiomeFeatures.addJungleVegetation(generation)
+            },
+            spawn = { spawn ->
+                spawn.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.PARROT, 40, 1, 2))
+                spawn.spawn(SpawnGroup.CREATURE, SpawnSettings.SpawnEntry(EntityType.PANDA, 1, 1, 2))
+            },
+            biome = { biome ->
+                biome.depth(0.1f).scale(0.3f).downfall(0.9f).category(Biome.Category.JUNGLE)
+            }
+        ).parent(ISLAND)
     }
 }

@@ -4,8 +4,13 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "AddEdgeBiomesLayerMixin",
+    "BiomeBuilderMixin",
+    "BuiltinBiomesAccessor",
+    "DefaultBiomeCreatorAccessor",
     "DefaultBiomeFeaturesMixin",
-    "EaseBiomeEdgeLayerMixin"
+    "EaseBiomeEdgeLayerMixin",
+    "GenerationSettingsBuilderMixin",
+    "GenerationSettingsMixin"
   ],
   "client": [
   ],

@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(AddEdgeBiomesLayer.class)
-public class AddEdgeBiomesLayerMixin {
+abstract class AddEdgeBiomesLayerMixin {
     @Inject(method = "sample", at = @At("RETURN"), cancellable = true)
     private void onSample(LayerRandomnessSource context, int n, int e, int s, int w, int center, CallbackInfoReturnable<Integer> info) {
         int smallVariants = LayerHelper.INSTANCE.transformIsland(context, n, e, s, w, center);

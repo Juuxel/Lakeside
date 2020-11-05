@@ -1,8 +1,6 @@
 package juuxel.lakeside.layer
 
-import juuxel.lakeside.api.MoreOverworldBiomes
-import net.minecraft.util.registry.Registry
-import net.minecraft.world.biome.Biome
+import juuxel.lakeside.biome.MoreOverworldBiomes
 import net.minecraft.world.biome.layer.util.LayerRandomnessSource
 
 object LayerHelper {
@@ -15,7 +13,7 @@ object LayerHelper {
     private inline fun transform(
         context: LayerRandomnessSource,
         n: Int, e: Int, s: Int, w: Int,
-        center: Int, transformer: (Biome, LayerRandomnessSource) -> Biome?
+        center: Int, transformer: (Int, LayerRandomnessSource) -> Int
     ): Int {
         var neighborCount = 0
         if (n == center) neighborCount++
@@ -24,10 +22,9 @@ object LayerHelper {
         if (w == center) neighborCount++
 
         if (neighborCount >= 2) {
-            val base = Registry.BIOME[center]
-            val transformed = transformer(base!!, context)
-            if (transformed != null) {
-                return Registry.BIOME.getRawId(transformed)
+            val transformed = transformer(center, context)
+            if (transformed != center) {
+                return transformed
             }
         }
 
