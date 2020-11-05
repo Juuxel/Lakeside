@@ -4,6 +4,7 @@ plugins {
     id 'fabric-loom' version '0.5-SNAPSHOT'
     id 'maven-publish'
     id 'org.jetbrains.kotlin.jvm' version '1.4.0'
+    id 'org.jmailen.kotlinter' version '3.2.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
@@ -67,8 +68,12 @@ tasks.withType(KotlinCompile) {
 // if it is present.
 // If you remove this task, sources will not be generated.
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = "sources"
+    archiveClassifier.set "sources"
     from sourceSets.main.allSource
+}
+
+kotlinter {
+    disabledRules = ["parameter-list-wrapping"]
 }
 
 jar {

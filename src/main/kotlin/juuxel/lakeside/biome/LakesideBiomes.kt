@@ -44,7 +44,7 @@ object LakesideBiomes {
         // Beaches
         OverworldBiomes.addEdgeBiome(MOUNTAIN_LAKE, BiomeKeys.STONE_SHORE, 1.0)
         OverworldBiomes.addEdgeBiome(JUNGLE_LAKE, BiomeKeys.JUNGLE_EDGE, 1.0)
-        //OverworldBiomes.addEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 1.0)
+        // OverworldBiomes.addEdgeBiome(FOREST_ISLAND, Biomes.BEACH, 1.0)
         OverworldBiomes.addShoreBiome(MOUNTAIN_LAKE, TAIGA_ISLAND, 1.0)
         OverworldBiomes.addShoreBiome(COLD_LAKE, TAIGA_ISLAND, 1.0)
         OverworldBiomes.addShoreBiome(WARM_LAKE, FOREST_ISLAND, 1.0)
