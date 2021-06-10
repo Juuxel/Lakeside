@@ -20,7 +20,7 @@ abstract class BiomeBuilderMixin {
     private void lakeside_onBuild(CallbackInfoReturnable<Biome> info) {
         GenerationSettingsDuck duck = (GenerationSettingsDuck) generationSettings;
         if (duck != null && duck.getLakeside_hasLake()) {
-            BiomeTracker.INSTANCE.addBiomeWithLakes(info.getReturnValue());
+            BiomeTracker.addBiomeWithLakes(info.getReturnValue());
         }
     }
 }

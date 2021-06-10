@@ -1,10 +1,6 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
     id 'fabric-loom' version '0.8-SNAPSHOT'
     id 'maven-publish'
-    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
-    id 'org.jmailen.kotlinter' version '3.4.4'
 }
 
 archivesBaseName = project.archives_base_name
@@ -26,7 +22,6 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc:fabric-language-kotlin:$project.flk_version"
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
@@ -53,14 +48,6 @@ java {
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
     options.release = 16
-}
-
-tasks.withType(KotlinCompile) {
-    kotlinOptions.jvmTarget = "15"
-}
-
-kotlinter {
-    disabledRules = ["parameter-list-wrapping"]
 }
 
 jar {

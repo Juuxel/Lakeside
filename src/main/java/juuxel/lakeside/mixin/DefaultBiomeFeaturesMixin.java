@@ -25,7 +25,7 @@ abstract class DefaultBiomeFeaturesMixin {
         // in the vanilla biome array
         ((GenerationSettingsDuck) builder).setLakeside_hasLake(true);
 
-        if (!Config.get().getDisableVanillaLakes()) {
+        if (!Config.get().disableVanillaLakes) {
             return builder.feature(step, feature);
         }
 
