@@ -29,13 +29,10 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.10.6" ,
-    "minecraft": ">=1.16.4",
+    "fabricloader": ">=0.11.0" ,
+    "minecraft": ">=1.17 <1.18-",
     "fabric": "*",
     "fabric-biome-api-v1": "^3.0.0",
-    "fabric-language-kotlin": "^1.4.0"
-  },
-  "suggests": {
-    "ltr": "*"
+    "fabric-language-kotlin": "^1.6.0"
   }
 }

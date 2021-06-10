@@ -30,7 +30,7 @@ object MoreOverworldBiomes {
     ): Int {
         if (variants.containsKey(base)) {
             val entries = variants[base]
-            val bound = entries.sumBy { it.chance }
+            val bound = entries.sumOf { it.chance }
             val i = random.nextInt(bound)
             var offset = 0
 
