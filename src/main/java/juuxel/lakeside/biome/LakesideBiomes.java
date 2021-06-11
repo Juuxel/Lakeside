@@ -236,10 +236,7 @@ public final class LakesideBiomes {
                 DefaultBiomeFeatures.addKelp(generation);
                 generation.feature(GenerationStep.Feature.VEGETAL_DECORATION, ConfiguredFeatures.PATCH_WATERLILLY);
             },
-            spawn -> {
-                spawn.spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.PUFFERFISH, 15, 1, 3));
-                spawn.spawn(SpawnGroup.WATER_CREATURE, new SpawnSettings.SpawnEntry(EntityType.TROPICAL_FISH, 25, 8, 8));
-            },
+            spawn -> {},
             effects -> {},
             biome -> {}
         ).parent(LAKE);
