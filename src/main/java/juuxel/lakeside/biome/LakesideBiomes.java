@@ -115,26 +115,25 @@ public final class LakesideBiomes {
         }
 
         switch (category) {
-            case EXTREME_HILLS:
+            case EXTREME_HILLS -> {
                 MoreOverworldBiomes.addSmallVariant(key, MOUNTAIN_LAKE, 45);
                 OverworldBiomes.addBiomeVariant(key, MOUNTAIN_LAKE, 0.05);
-                break;
+            }
 
-            case JUNGLE:
+            case JUNGLE -> {
                 MoreOverworldBiomes.addSmallVariant(key, JUNGLE_LAKE, 25);
                 OverworldBiomes.addBiomeVariant(key, JUNGLE_LAKE, 0.05);
-                break;
+            }
 
-            case ICY:
-            case TAIGA:
+            case ICY, TAIGA -> {
                 MoreOverworldBiomes.addSmallVariant(key, COLD_LAKE, 25);
                 OverworldBiomes.addBiomeVariant(key, COLD_LAKE, 0.05);
-                break;
+            }
 
-            default:
+            default -> {
                 MoreOverworldBiomes.addSmallVariant(key, WARM_LAKE, 25);
                 OverworldBiomes.addBiomeVariant(key, WARM_LAKE, 0.05);
-                break;
+            }
         }
     }
 
